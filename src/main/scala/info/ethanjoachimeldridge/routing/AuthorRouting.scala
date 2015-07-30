@@ -7,6 +7,7 @@ import spray.httpx.SprayJsonSupport._
 import MediaTypes._
 
 import info.ethanjoachimeldridge.model._
+import info.ethanjoachimeldridge.Configuration
 
 /** Actor responsible for routing HTTP requests to appropriate services for Authors
  *
@@ -19,7 +20,7 @@ trait AuthorRouting extends HttpService {
     pathPrefix("v0" / "authors") {
       pathEndOrSingleSlash { 
         get {
-          parameters('page ? 0, 'perPage ? 10).as(ApiPagination) { pagination =>
+          parameters('page ? 0, 'perPage ? Configuration.defaultPageSize).as(ApiPagination) { pagination =>
             handle(s"Not Yet GET $pagination")
           }
         } ~ 
@@ -42,7 +43,7 @@ trait AuthorRouting extends HttpService {
       } ~ 
       path(IntNumber / "books") { authorId =>
         pathEndOrSingleSlash {
-          parameters('page ? 0, 'perPage ? 10).as(ApiPagination) { pagination =>
+          parameters('page ? 0, 'perPage ? Configuration.defaultPageSize).as(ApiPagination) { pagination =>
             handle(s"$authorId Not Yet GET $pagination")
           }
         }

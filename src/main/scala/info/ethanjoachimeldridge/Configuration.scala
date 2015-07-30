@@ -12,4 +12,6 @@ object Configuration {
 	/** port which the public http service will run on  */
 	val httpPort = config.getInt("bindings.http.port")
 
+	val defaultPageSize = config.getInt("api.default.pageSize")
+
 }
