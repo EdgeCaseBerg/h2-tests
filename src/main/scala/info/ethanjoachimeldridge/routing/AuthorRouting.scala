@@ -12,10 +12,34 @@ import MediaTypes._
  */
 trait AuthorRouting extends HttpService {
 
-  /** dummy test route placeholder */
+  /** Supported Routes by this HttpService */
   val authorRoutes = {
-    path("test" / Segment ) { text =>
-      handle(text)
+    pathPrefix("v0" / "authors") {
+      pathEndOrSingleSlash { 
+        get {
+          handle("Not Yet GET")
+        } ~ 
+        post {
+          handle("Not Yet POST")
+        }
+      } ~
+      path(IntNumber) { authorId =>
+        pathEndOrSingleSlash {
+          get {
+            handle(s"$authorId Not Yet GET")
+          } ~ 
+          put {
+            handle(s"$authorId Not Yet PUT")
+          }
+        } ~ 
+        pathPrefix("books") {
+          pathEndOrSingleSlash {
+            get {
+              handle(s"$authorId Not Yet GET")
+            }
+          }
+        }
+      }
     }
   }
 
@@ -25,7 +49,7 @@ trait AuthorRouting extends HttpService {
    * @return A partial function that will complete a request context
    */
   private def handle(msg: String) : RequestContext => Unit = {
-    get {
+    respondWithMediaType(`application/json`) {
       complete(StatusCodes.BadRequest, msg) 
     }
   }

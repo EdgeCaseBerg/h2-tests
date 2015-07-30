@@ -12,10 +12,27 @@ import MediaTypes._
  */
 trait BookRouting extends HttpService {
 
-  /** dummy test route placeholder */
+  /** Supported Routes by this HttpService */
   val bookRoutes = {
-    path("test" / Segment ) { text =>
-      handle(text)
+    pathPrefix("v0" / "books") {
+      pathEndOrSingleSlash { 
+        get {
+          handle("Not Yet GET")
+        } ~ 
+        post {
+          handle("Not Yet POST")
+        }
+      } ~
+      path(IntNumber) { bookId =>
+        pathEndOrSingleSlash {
+          get {
+            handle(s"$bookId Not Yet GET")
+          } ~ 
+          put {
+            handle(s"$bookId Not Yet PUT")
+          }
+        }
+      } 
     }
   }
 
@@ -25,7 +42,7 @@ trait BookRouting extends HttpService {
    * @return A partial function that will complete a request context
    */
   private def handle(msg: String) : RequestContext => Unit = {
-    get {
+    respondWithMediaType(`application/json`) {
       complete(StatusCodes.BadRequest, msg) 
     }
   }
