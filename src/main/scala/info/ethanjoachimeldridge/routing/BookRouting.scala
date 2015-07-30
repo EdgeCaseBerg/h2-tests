@@ -30,6 +30,9 @@ trait BookRouting extends HttpService {
           } ~ 
           put {
             handle(s"$bookId Not Yet PUT")
+          } ~ 
+          delete {
+            handle(s"$bookId Not Yet DELETE")
           }
         }
       } 

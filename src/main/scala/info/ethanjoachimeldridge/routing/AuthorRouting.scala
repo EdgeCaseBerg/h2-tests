@@ -30,13 +30,16 @@ trait AuthorRouting extends HttpService {
           } ~ 
           put {
             handle(s"$authorId Not Yet PUT")
+          } ~ 
+          delete {
+            handle(s"$authorId Not Yet DELETE")
           }
-        } ~ 
-        pathPrefix("books") {
-          pathEndOrSingleSlash {
-            get {
-              handle(s"$authorId Not Yet GET")
-            }
+        }
+      } ~ 
+      path(IntNumber / "books") { authorId =>
+        pathEndOrSingleSlash {
+          get {
+            handle(s"$authorId Not Yet GET books")
           }
         }
       }
