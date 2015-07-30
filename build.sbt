@@ -29,6 +29,8 @@ libraryDependencies ++= {
 	)
 }
 
+Revolver.settings
+
 fork in Test := true
 
 javaOptions in Test += "-XX:+CMSClassUnloadingEnabled -XX:+UseConcMarkSweepGC -XX:+CMSPermGenSweepingEnabled -XX:MaxPermSize=256M"
