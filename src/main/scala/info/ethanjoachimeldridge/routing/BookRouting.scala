@@ -6,6 +6,8 @@ import spray.http._
 import spray.httpx.SprayJsonSupport._
 import MediaTypes._
 
+import info.ethanjoachimeldridge.model._
+
 /** Actor responsible for routing HTTP requests to appropriate services for Books
  *
  * Mix into an HttpActor and ~ its route
@@ -17,7 +19,9 @@ trait BookRouting extends HttpService {
     pathPrefix("v0" / "books") {
       pathEndOrSingleSlash { 
         get {
-          handle("Not Yet GET")
+          parameters('page ? 0, 'perPage ? 10).as(ApiPagination) { pagination =>
+            handle(s"Not Yet GET $pagination")
+          }
         } ~ 
         post {
           handle("Not Yet POST")
