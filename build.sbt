@@ -33,7 +33,7 @@ Revolver.settings
 
 fork in Test := true
 
-javaOptions in Test += "-XX:+CMSClassUnloadingEnabled -XX:+UseConcMarkSweepGC -XX:+CMSPermGenSweepingEnabled -XX:MaxPermSize=256M"
+javaOptions in Test += "-XX:MaxPermSize=256M"
 
 //Flyway for database settings: http://flywaydb.org/documentation/sbt/
 
