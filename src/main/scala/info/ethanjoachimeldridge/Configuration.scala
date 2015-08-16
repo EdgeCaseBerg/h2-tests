@@ -14,4 +14,12 @@ object Configuration {
 
 	val defaultPageSize = config.getInt("api.default.pageSize")
 
+	val dbDriver = config.getString("db.default.driver")
+
+	val dbUrl = config.getString("db.default.url")
+
+	val dbUser = config.getString("db.default.user")
+
+	val dbPassword = config.getString("db.default.password")
+
 }
