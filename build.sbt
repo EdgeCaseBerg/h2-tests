@@ -4,7 +4,7 @@ name := "h2-example"
 
 version := "0.0.0-SNAPSHOT" 
 
-scalaVersion := "2.10.5"
+scalaVersion := "2.11.6"
 
 libraryDependencies <+= (scalaVersion)("org.scala-lang" % "scala-compiler" % _)
 
@@ -17,6 +17,8 @@ libraryDependencies ++= {
 		"io.spray"            %%  "spray-routing" % sprayV,
 		"io.spray"            %%  "spray-json"    % "1.3.1",
 		"com.typesafe.akka"   %%  "akka-actor"    % akkaV,
+		"com.typesafe.scala-logging" %% "scala-logging" % "3.1.0",
+		"ch.qos.logback"  %  "logback-classic"   % "1.1.3",
 		"com.typesafe" % "config" % "1.2.1",
 		"com.typesafe.play" %% "anorm" % anormVersion,
 		"org.scalikejdbc" %% "scalikejdbc"        % "2.2.+",
