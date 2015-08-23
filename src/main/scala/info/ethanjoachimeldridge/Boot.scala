@@ -7,6 +7,7 @@ import spray.can.Http
 import akka.pattern.ask
 import akka.util.Timeout
 import scala.concurrent.duration._
+import info.ethanjoachimeldridge.config._
 
 
 /** Responsible in Starting the Spray HTTP Service 

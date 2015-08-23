@@ -4,7 +4,7 @@ import java.sql.{Connection,SQLException}
 import scalikejdbc._
 import anorm._
 
-import info.ethanjoachimeldridge.Configuration
+import info.ethanjoachimeldridge.config.Configuration
 import info.ethanjoachimeldridge.dao.exception._
 
 import com.typesafe.scalalogging._

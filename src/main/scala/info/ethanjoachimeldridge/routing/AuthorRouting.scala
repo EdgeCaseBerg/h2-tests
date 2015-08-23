@@ -7,7 +7,7 @@ import spray.httpx.SprayJsonSupport._
 import MediaTypes._
 
 import info.ethanjoachimeldridge.model._
-import info.ethanjoachimeldridge.Configuration
+import info.ethanjoachimeldridge.config.Configuration
 
 /** Actor responsible for routing HTTP requests to appropriate services for Authors
  *
