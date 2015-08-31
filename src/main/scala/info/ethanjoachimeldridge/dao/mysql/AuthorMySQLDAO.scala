@@ -40,7 +40,25 @@ class AuthorMySQLDAO extends AuthorDAO {
 		readModel		
 	}
 	
-	// def update(model: Author)(implicit ec: ExecutionContext): Future[Author] = 
+	def update(model: Author)(implicit ec: ExecutionContext): Future[Author] = future {
+		val updated = MySQLConnector.withTransaction { implicit connection =>
+			val numberEffected = SQL(
+				"""UPDATE authors SET name = {name} WHERE id = {id}"""
+			).on(
+			"name" -> model.name,
+			"id" -> model.id
+			).executeUpdate()
+			numberEffected match {
+				case 0 => false
+				case _ => true
+			}
+		}
+		if(updated) {
+			model
+		} else {
+			throw new DataNotFoundException("Author to update does not exist")
+		}
+	}
 
 	// def findBooksByAuthor(model: info.ethanjoachimeldridge.model.Author)(implicit ec: scala.concurrent.ExecutionContext): scala.concurrent.Future[List[(info.ethanjoachimeldridge.model.Book, List[info.ethanjoachimeldridge.model.BookMeta])]] = ???
 	// def readAll(page: Int,perPage: Int)(implicit ec: scala.concurrent.ExecutionContext): scala.concurrent.Future[List[info.ethanjoachimeldridge.model.Author]] = ???
