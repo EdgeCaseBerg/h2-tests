@@ -84,6 +84,19 @@ class AuthorMySQLDAO extends AuthorDAO {
 		}
 		books
 	}
-	// def readAll(page: Int,perPage: Int)(implicit ec: ExecutionContext): Future[List[Author]] = ???
+	
+	def readAll(page: Int,perPage: Int)(implicit ec: ExecutionContext): Future[List[Author]] = future {
+		val authors : List[Author] = MySQLConnector.withReadOnlyConnection { implicit connection =>
+			val result = SQL(
+				"""
+				SELECT id, name FROM author ORDER BY id LIMIT {offset}, {perPage}
+				"""
+			).on("offset" -> page * perPage, "perPage" -> perPage).as(
+				RowParsers.authorParser *
+			)
+			result.toList
+		}
+		authors
+	}
 
 }
