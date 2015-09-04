@@ -26,7 +26,7 @@ libraryDependencies ++= {
 		"mysql" % "mysql-connector-java" % "5.1.36",
 		"com.typesafe.akka"   %%  "akka-testkit"  % akkaV   % "test",
 		"io.spray"            %%  "spray-testkit" % sprayV  % "test",
-		"org.scalatest" % "scalatest_2.10" % "2.2.4" % "test",
+		"org.scalatest" % "scalatest_2.11" % "2.2.4" % "test",
 		"org.flywaydb" % "flyway-core" % "3.2.1"
 	)
 }
@@ -39,12 +39,20 @@ javaOptions in Test += "-XX:MaxPermSize=256M"
 
 //Flyway for database settings: http://flywaydb.org/documentation/sbt/
 
+unmanagedBase <<= baseDirectory { base => base / "lib" }
+
+Conf.dbConf := {
+  val cfg = com.typesafe.config.ConfigFactory.parseFile((resourceDirectory in Compile).value / "application.conf")
+  val prefix = "db.default"
+  (cfg.getString(s"$prefix.url"), cfg.getString(s"$prefix.user"), cfg.getString(s"$prefix.password"))
+}
+
 seq(flywaySettings: _*)
 
-flywayUrl := "jdbc:mysql://localhost/h2example"
+flywayUrl := Conf.dbConf.value._1
 
-flywayUser := "test"
+flywayUser := Conf.dbConf.value._2
 
-flywayPassword := "test"
+flywayPassword := Conf.dbConf.value._3
 
 flywayDriver := "com.mysql.jdbc.Driver"
