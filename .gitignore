@@ -1,3 +1,5 @@
 project/*
 target/*
 !project/plugins.sbt
+!project/Conf.scala
+!project/build.sbt
