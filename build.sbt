@@ -39,8 +39,6 @@ javaOptions in Test += "-XX:MaxPermSize=256M"
 
 //Flyway for database settings: http://flywaydb.org/documentation/sbt/
 
-unmanagedBase <<= baseDirectory { base => base / "lib" }
-
 Conf.dbConf := {
   val cfg = com.typesafe.config.ConfigFactory.parseFile((resourceDirectory in Compile).value / "application.conf")
   val prefix = "db.default"
