@@ -8,24 +8,34 @@ import spray.json._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import info.ethanjoachimeldridge.model._
+import info.ethanjoachimeldridge.dao.exception._
 
 import org.h2.jdbcx.JdbcDataSource;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 
-class AuthorMySQLDAOTest extends FlatSpec with Matchers with ScalaFutures {
-	implicit val defaultPatience = PatienceConfig(timeout = Span(10, Seconds), interval = Span(500, Millis))  
+import com.typesafe.config.ConfigFactory
+import org.flywaydb.core.Flyway;
+
+
+class AuthorMySQLDAOTest extends MySQLTest {
 
 	val testAuthor = Author(-1, "testAuthor")
 	var testAuthorId = -1L
 	val authorMySQLDAO = new AuthorMySQLDAO
-	
 
-	"After loading the database" should "be able to create an Author" in {
+	"The AuthorMySQLDAO" should "be able to create an Author" in {
 		val res = authorMySQLDAO.create(testAuthor)
 		whenReady(res) { result =>
 			testAuthorId = result.id
 			assertResult(testAuthor.copy(id=testAuthorId)) { result }
+		}
+	}
+
+	it should "fail to create a non-unique author" in {
+		val res = authorMySQLDAO.create(testAuthor)
+		whenReady(res.failed) { ex =>
+			ex shouldBe an [DuplicateDataError]
 		}
 	}
 }
