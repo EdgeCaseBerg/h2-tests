@@ -32,7 +32,7 @@ class AuthorMySQLDAOTest extends MySQLTest {
 		}
 	}
 
-	it should "fail to create a non-unique author" in {
+	it should "fail to create an author with a non-unique id" in {
 		val res = authorMySQLDAO.create(testAuthor)
 		whenReady(res.failed) { ex =>
 			ex shouldBe an [DuplicateDataError]
