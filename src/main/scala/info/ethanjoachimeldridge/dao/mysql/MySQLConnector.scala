@@ -10,8 +10,8 @@ import info.ethanjoachimeldridge.dao.exception._
 import com.typesafe.scalalogging._
 import org.slf4j.LoggerFactory
 
-object MySQLConnector {
-	val logger = Logger(LoggerFactory.getLogger("MySQLConnector"))
+object MySQLConnector extends StrictLogging {
+	
 
 	/* Ensure that the Driver is loaded properly. */
 	Class.forName(Configuration.dbDriver)
