@@ -8,3 +8,9 @@ Neccesary MySQL Setup
 	mysql> GRANT ALL ON h2tests.* TO 'test'@'localhost';
 	mysql> FLUSH PRIVILEGES
 
+Notes for blogpost:
+
+- Always include the tablename in row parsers so that joins don't mess up. 
+  Be sure to include a couple examples.
+
+- Note that you can't set the engine in the migrations or h2 fails.
