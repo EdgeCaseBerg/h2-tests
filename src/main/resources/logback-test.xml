@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="false" debug="false">
+  <appender name="CONSOLELOG" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+      <Pattern>
+        %d{yyyy-MM-dd HH:mm:ss} %-5level %logger{36} - %msg%n
+      </Pattern>
+    </encoder>
+  </appender>
+  <appender name="FILELOG" class="ch.qos.logback.core.FileAppender">
+    <File>app.log</File>
+    <param name="Append" value="true" />
+    <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+      <Pattern>
+        %d{yyyy-MM-dd HH:mm:ss} %-5level %logger{36} - %msg%n
+      </Pattern>
+    </encoder>
+  </appender>
+  <!-- http://logback.qos.ch/apidocs/ch/qos/logback/classic/AsyncAppender.html
+  In order to optimize performance this appender deems events of level TRACE, DEBUG and INFO as discardable.
+  Note that only one appender may be attached to AsyncAppender!
+   -->
+  <appender name="async" class="ch.qos.logback.classic.AsyncAppender">    
+    <queueSize>500</queueSize>
+    <appender-ref ref="FILELOG"/>
+    <includeCallerData>true</includeCallerData>
+  </appender>
+  <!-- you can also drop it completely -->
+  <logger name="se.scalablesolutions" level="DEBUG"/> 
+  <logger name="ch.qos.logback.classic.LoggerContext" level="WARN"/>
+  <logger name="org.flywaydb.core" level="WARN"/>
+  <logger name="info.ethanjoachimeldridge" level="WARN"/>
+
+  <root level="INFO">
+    <appender-ref ref="async"/>
+    <appender-ref ref="CONSOLELOG"/>
+  </root>
+</configuration>
