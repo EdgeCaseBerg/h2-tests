@@ -7,6 +7,11 @@ import java.util.Locale
 
 import info.ethanjoachimeldridge.model.{Author, Book, BookMeta}
 
+/** Object to contain useful row parsers that can be used throughout the DAO
+ *
+ * Note that we use the table name in the column specifier, this is important 
+ * or else you might end up with non-nullable column errors
+ */
 object RowParsers {
 
 	/** Simple Anorm Parser to extract Author Records */
