@@ -11,7 +11,6 @@ import com.typesafe.scalalogging._
 import org.slf4j.LoggerFactory
 
 object MySQLConnector extends StrictLogging {
-	
 
 	/* Ensure that the Driver is loaded properly. */
 	Class.forName(Configuration.dbDriver)
@@ -25,6 +24,7 @@ object MySQLConnector extends StrictLogging {
 	private def sqlToApplicationException(ex: Throwable) : Throwable = ex match {
 		case sql : SQLException if sql.getErrorCode() == 23505 => DuplicateDataError("Could not perform request, unique data violation", ex)
 		case sql : SQLException if sql.getErrorCode() == 42102 => TableNotFoundException("Could not perform request, underlying structore not present", ex)
+		case sql : SQLException if sql.getErrorCode() == 42122 => DataErrorException(s"The column specified in your query does not exist! ${ex.getMessage()}", ex)
 		case sql : SQLException => 
 			logger.warn(s"Unhandled Converted MySQL Exception: ${sql.getSQLState()} ${sql.getErrorCode()}")
 			DataErrorException(ex.getMessage, ex)

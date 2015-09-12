@@ -66,8 +66,8 @@ class AuthorMySQLDAO extends AuthorDAO {
 			val resultant = SQL(
 				"""
 				SELECT 
-					books.authorId, 
-					books.bookId, 
+					book.authorId, 
+					book.bookId, 
 					bookMeta.lang, 
 					bookMeta.title, 
 					bookMeta.shortDescription, 
