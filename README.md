@@ -15,3 +15,4 @@ Notes for blogpost:
 
 - Note that you can't set the engine in the migrations or h2 fails.
 - Note the libraryDependencies in project/build.sbt to affect the build's classes themselves. (so we can flyway configure in one place)
+- h2 constraints seperate from create table

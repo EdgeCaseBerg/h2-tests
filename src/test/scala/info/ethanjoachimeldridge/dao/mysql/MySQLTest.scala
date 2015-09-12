@@ -27,7 +27,7 @@ trait MySQLTest extends FlatSpec with Matchers with ScalaFutures with BeforeAndA
 	val user = conf.getString("db.default.user")
 	val pass = conf.getString("db.default.password")
 	flyway.setDataSource(url, user, pass, "")
-	flyway.setSchemas("public")
+	flyway.setSchemas("h2tests","public")
 
 
 	before {
