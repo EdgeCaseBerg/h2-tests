@@ -11,6 +11,6 @@ trait BookDAO extends CrudDAO[Book]{
 	 * @param ec Implicit execution context
 	 * @return A Future containing a List of Book objects
 	 */	
-	def readAll(page: Int, perPage: Int)(implicit ec: ExecutionContext) : Future[List[Book]] = ???
+	def readAll(page: Int, perPage: Int)(implicit ec: ExecutionContext) : Future[List[Book]]
 
 }
