@@ -96,4 +96,31 @@ class BookMySQLDAO extends BookDAO {
 		updatedBookMeta
 	}
 
+	def deleteBookMeta(bookMeta: BookMeta)(implicit ec: ExecutionContext) : Future[Boolean] = future {
+		MySQLConnector.withTransaction { implicit connection =>
+			val numberEffected = SQL(
+				"""DELETE FROM bookMeta WHERE bookId = {bookId} AND lang = {lang}"""
+			).on("bookId" -> bookMeta.bookId, "lang" -> bookMeta.lang.toLanguageTag).executeUpdate()
+			true //true because deleting something that doesn't exist is the same result as deleting something that does
+			}
+	}
+
+	def readMetaForBook(book: Book)(implicit ec: ExecutionContext) : Future[List[BookMeta]] = future {
+		val bookMetaList : List[BookMeta] = MySQLConnector.withReadOnlyConnection { implicit connection =>
+			val bookMetas = SQL(
+				"""
+				SELECT bookMeta.bookId, bookMeta.lang, bookMeta.title, bookMeta.shortDescription, bookMeta.longDescription 
+				FROM bookMeta 
+				WHERE bookId = {bookId}
+				"""
+			).on(
+				"bookId" -> book.bookId
+			).as(
+				RowParsers.bookMetaParser *
+			)
+			bookMetas.toList
+		}
+		bookMetaList
+	}
+
 }
