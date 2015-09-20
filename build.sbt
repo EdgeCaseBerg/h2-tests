@@ -4,7 +4,7 @@ name := "h2-example"
 
 version := "0.0.0-SNAPSHOT" 
 
-scalaVersion := "2.11.6"
+scalaVersion := "2.11.7"
 
 libraryDependencies <+= (scalaVersion)("org.scala-lang" % "scala-compiler" % _)
 
