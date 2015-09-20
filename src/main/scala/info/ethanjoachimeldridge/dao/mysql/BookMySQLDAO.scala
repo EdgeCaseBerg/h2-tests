@@ -75,7 +75,7 @@ class BookMySQLDAO extends BookDAO {
 	}
 
 	def addBookMetaToBook(book: Book,bookMeta: BookMeta)(implicit ec: ExecutionContext): Future[BookMeta] = future {
-		val updatedBookMeta : BookMeta = MySQLConnector.withTransaction { implicit connection =>
+		val newBookMeta : BookMeta = MySQLConnector.withTransaction { implicit connection =>
 			val affectedRows = SQL(
 				"""
 				INSERT INTO bookMeta (bookId, lang, title, shortDescription, longDescription) 
@@ -93,8 +93,33 @@ class BookMySQLDAO extends BookDAO {
 				case _ => bookMeta.copy(bookId = book.bookId)
 			}
 		}
-		updatedBookMeta
+		newBookMeta
 	}
+
+	def updateBookMeta(bookMeta: BookMeta)(implicit ec: ExecutionContext) : Future[BookMeta] = future {
+		val updatedBookMeta : BookMeta = MySQLConnector.withTransaction { implicit connection =>
+			val affectedRows = SQL(
+				"""
+				UPDATE bookMeta SET 
+					title = {title},
+					shortDescription = {shortDescription},
+					longDescription = {longDescription}
+				WHERE bookId = {bookId} AND lang = {lang}
+				"""
+			).on(
+				"title" -> bookMeta.title,
+				"shortDescription" -> bookMeta.shortDescription,
+				"longDescription" -> bookMeta.longDescription,
+				"bookId" -> bookMeta.bookId,
+				"lang" -> bookMeta.lang.toLanguageTag
+			).executeUpdate()
+			affectedRows match {
+				case 0 => throw DataNotFoundException("Could not find BookMeta to update")
+				case _ => bookMeta
+			}
+		}
+		updatedBookMeta
+	}	
 
 	def deleteBookMeta(bookMeta: BookMeta)(implicit ec: ExecutionContext) : Future[Boolean] = future {
 		MySQLConnector.withTransaction { implicit connection =>
