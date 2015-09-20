@@ -38,7 +38,7 @@ object RowParsers {
 		get[String]("bookMeta.shortDescription") ~
 		get[String]("bookMeta.longDescription") map {
 			case bookId ~ lang ~ title ~ shortDescription ~ longDescription =>
-				BookMeta(bookId, new Locale(lang), title, shortDescription, longDescription)
+				BookMeta(bookId, Locale.forLanguageTag(lang), title, shortDescription, longDescription)
 		}
 	}
 

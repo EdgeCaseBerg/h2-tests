@@ -24,7 +24,7 @@ class BookMySQLDAO extends BookDAO {
 	def delete(model: Book)(implicit ec: ExecutionContext): Future[Boolean] = future {
 		MySQLConnector.withTransaction { implicit connection =>
 			val numberEffected = SQL(
-				"""DELETE FROM Book WHERE bookId = {bookId}"""
+				"""DELETE FROM book WHERE bookId = {bookId}"""
 			).on("bookId" -> model.bookId).executeUpdate()
 			true //true because deleting something that doesn't exist is the same result as deleting something that does
 		}
@@ -32,7 +32,7 @@ class BookMySQLDAO extends BookDAO {
 	def read(model: Book)(implicit ec: ExecutionContext): Future[Book] = future {
 		val readModel : Book = MySQLConnector.withReadOnlyConnection { implicit connection => 
 			val result = SQL(
-				"""SELECT bookId, authorId FROM Book WHERE bookId = {id}"""
+				"""SELECT bookId, authorId FROM book WHERE bookId = {id}"""
 			).on("id" -> model.bookId).as(RowParsers.bookParser *).headOption
 			val resultModel : Book = result.fold(throw new DataNotFoundException("Book not found"))(identity)
 			resultModel
@@ -43,7 +43,7 @@ class BookMySQLDAO extends BookDAO {
 	def update(model: Book)(implicit ec: ExecutionContext): Future[Book] = future {
 		val updated = MySQLConnector.withTransaction { implicit connection =>
 			val numberEffected = SQL(
-				"""UPDATE Book SET authorId = {authorId} WHERE bookId = {id}"""
+				"""UPDATE book SET authorId = {authorId} WHERE bookId = {id}"""
 			).on(
 			"authorId" -> model.authorId,
 			"id" -> model.bookId
@@ -61,17 +61,39 @@ class BookMySQLDAO extends BookDAO {
 	}
 	
 	def readAll(page: Int,perPage: Int)(implicit ec: ExecutionContext): Future[List[Book]] = future {
-		val Books : List[Book] = MySQLConnector.withReadOnlyConnection { implicit connection =>
+		val books : List[Book] = MySQLConnector.withReadOnlyConnection { implicit connection =>
 			val result = SQL(
 				"""
-				SELECT bookId, authorId FROM Book ORDER BY bookId LIMIT {offset}, {perPage}
+				SELECT bookId, authorId FROM book ORDER BY bookId LIMIT {offset}, {perPage}
 				"""
 			).on("offset" -> page * perPage, "perPage" -> perPage).as(
 				RowParsers.bookParser *
 			)
 			result.toList
 		}
-		Books
+		books
+	}
+
+	def addBookMetaToBook(book: Book,bookMeta: BookMeta)(implicit ec: ExecutionContext): Future[BookMeta] = future {
+		val updatedBookMeta : BookMeta = MySQLConnector.withTransaction { implicit connection =>
+			val affectedRows = SQL(
+				"""
+				INSERT INTO bookMeta (bookId, lang, title, shortDescription, longDescription) 
+				VALUES ({bookId}, {lang}, {title}, {shortDescription}, {longDescription})
+				"""
+			).on(
+				"bookId" -> book.bookId,
+				"lang" -> bookMeta.lang.toLanguageTag,
+				"title" -> bookMeta.title,
+				"shortDescription" -> bookMeta.shortDescription,
+				"longDescription" -> bookMeta.longDescription
+			).executeUpdate()
+			affectedRows match {
+				case 0 => throw DataErrorException("Could not add BookMeta to book", new Throwable("No rows updated during transaction"))
+				case _ => bookMeta.copy(bookId = book.bookId)
+			}
+		}
+		updatedBookMeta
 	}
 
 }
