@@ -123,4 +123,32 @@ class BookMySQLDAO extends BookDAO {
 		bookMetaList
 	}
 
+
+	def readAllWithMeta(page: Int, perPage: Int)(implicit ec: ExecutionContext) : Future[List[(Book, List[BookMeta])]] = future {
+		val allWithMeta : List[(Book, List[BookMeta])] = MySQLConnector.withReadOnlyConnection { implicit connection =>
+			val result = SQL(
+				"""
+				SELECT  book.bookId, book.authorId,
+								bookMeta.bookId, bookMeta.lang, bookMeta.title, bookMeta.shortDescription, bookMeta.longDescription 
+				FROM book 
+					JOIN (
+						SELECT book.bookId FROM book LIMIT {offset}, {perPage}
+					) AS paginationQuery ON book.bookId = paginationQuery.bookId
+					LEFT JOIN bookMeta ON book.bookId = bookMetas.bookId
+				"""
+			).on(
+				"offset" -> page * perPage,
+				"perPage" -> perPage
+			).as(
+				RowParsers.bookParser ~ (RowParsers.bookMetaParser ?) *
+			).groupBy(_._1).map {
+				case(book, list) => {
+					(book, list.map(_._2).filter(_.isDefined).map(_.get).toSet.toList)
+				}
+			}
+			result.toList
+		}
+		allWithMeta
+	}
+
 }
