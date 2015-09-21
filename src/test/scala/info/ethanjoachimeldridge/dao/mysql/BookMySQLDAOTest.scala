@@ -26,6 +26,7 @@ class BookMySQLDAOTest extends MySQLTest {
 	var testBookId2 = -1L
 	var testBook1 = Book(testBookId1, testAuthorId)
 	var testBook2 = Book(testBookId2, testAuthorId)
+	var testBookMeta = BookMeta(testBookId2, Locale.forLanguageTag("en"), "title","short","longer")
 
 	
 	val authorMySQLDAO = new AuthorMySQLDAO
@@ -119,6 +120,18 @@ class BookMySQLDAOTest extends MySQLTest {
 		whenReady(res) { result =>
 			assertResult(2) { result.size }
 			result.map(_.authorId == testAuthorId).map(assert(_))
+			result.map(i => assert(List(testBook1,testBook2).contains(i)))
+		}
+	}
+
+	it should "add meta information to one of the books" in {
+		assume(testBookId2 != -1, "Second book was not created")
+		val res = bookMySQLDAO.addBookMetaToBook(testBook2, testBookMeta)
+		whenReady(res) { result =>
+			testBookMeta = testBookMeta.copy(bookId = result.bookId)
+			assertResult(testBookMeta) {
+				result
+			}
 		}
 	}
 
