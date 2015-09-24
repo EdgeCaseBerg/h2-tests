@@ -135,6 +135,17 @@ class BookMySQLDAOTest extends MySQLTest {
 		}
 	}
 
+	it should "update meta information to one of the books" in {
+		assume(testBookId2 != -1, "Second book was not created")
+		val res = bookMySQLDAO.updateBookMeta(testBookMeta.copy(title="other"))
+		whenReady(res) { result =>
+			assertResult(testBookMeta.copy(title="other")) {
+				result
+			}
+			testBookMeta = result
+		}
+	}
+
 
 	"The BookMySQLDAOTest" should "clean up the resources it generated" in {
 		val res = for {
