@@ -146,6 +146,14 @@ class BookMySQLDAOTest extends MySQLTest {
 		}
 	}
 
+	it should "delete meta information to one of the books" in {
+		assume(testBookMeta.bookId != -1,"Meta was never created")
+		val res = bookMySQLDAO.deleteBookMeta(testBookMeta)
+		whenReady(res) { result =>
+			assert(result)
+		}
+	}
+
 
 	"The BookMySQLDAOTest" should "clean up the resources it generated" in {
 		val res = for {
