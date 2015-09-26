@@ -154,6 +154,35 @@ class BookMySQLDAOTest extends MySQLTest {
 		}
 	}
 
+	it should "add meta information to one of the books after its been deleted" in {
+		assume(testBookId2 != -1, "Second book was not created")
+		val res = bookMySQLDAO.addBookMetaToBook(testBook2, testBookMeta)
+		whenReady(res) { result =>
+			testBookMeta = testBookMeta.copy(bookId = result.bookId)
+			assertResult(testBookMeta) {
+				result
+			}
+		}
+	}
+
+	it should "read meta information for a book" in {
+		assume(testBookMeta.bookId != -1, "BookMeta was never created")
+		val res = bookMySQLDAO.readMetaForBook(testBook2)
+		whenReady(res) { result =>
+			assertResult(result) {
+				List(testBookMeta)
+			}
+		}
+	}
+
+	it should "read all meta information" in {
+		val res = bookMySQLDAO.readAllWithMeta(0,2)
+		whenReady(res) { result =>
+			assertResult(2) {
+				result.size
+			}
+		}
+	}
 
 	"The BookMySQLDAOTest" should "clean up the resources it generated" in {
 		val res = for {
