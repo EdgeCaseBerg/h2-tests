@@ -15,3 +15,4 @@ Notes for blogpost:
 - Note the libraryDependencies in project/build.sbt to affect the build's classes themselves. (so we can flyway configure in one place)
 - h2 constraints seperate from create table
 - `<logger name="org.flywaydb.core" level="WARN"/>` to debug for troubleshooting migrations
+- h2 query logging for checking errors via TRACE_LEVEL_SYSTEM_OUT=3 in the connection url

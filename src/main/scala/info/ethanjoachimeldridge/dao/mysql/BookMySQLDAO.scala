@@ -159,7 +159,7 @@ class BookMySQLDAO extends BookDAO {
 					JOIN (
 						SELECT book.bookId FROM book LIMIT {offset}, {perPage}
 					) AS paginationQuery ON book.bookId = paginationQuery.bookId
-					LEFT JOIN bookMeta ON book.bookId = bookMetas.bookId
+					LEFT JOIN bookMeta ON book.bookId = bookMeta.bookId
 				"""
 			).on(
 				"offset" -> page * perPage,
