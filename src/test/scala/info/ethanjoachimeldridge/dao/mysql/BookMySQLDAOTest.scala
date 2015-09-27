@@ -181,6 +181,18 @@ class BookMySQLDAOTest extends MySQLTest {
 			assertResult(2) {
 				result.size
 			}
+			/* The book without meta should not have meta */
+			assertResult(Some(Nil)) {
+				result.find(_._1.bookId == testBookId1).map { tuple =>
+					tuple._2 
+				}
+			}
+			/* Book with meta should have meta */
+			assertResult(Some(List(testBookMeta))) {
+				result.find(_._1.bookId == testBookId2).map { tuple =>
+					tuple._2 
+				}
+			}
 		}
 	}
 
