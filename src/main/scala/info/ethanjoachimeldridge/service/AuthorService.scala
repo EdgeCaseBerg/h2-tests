@@ -10,4 +10,8 @@ class AuthorService(implicit daoContext: DAOContext, ec: ExecutionContext)  {
 		//validate
 		daoContext.authorDAO.create(author)
 	}
+
+	def findAuthorById(id: Long) = {
+		daoContext.authorDAO.read(Author(id=id,name=""))
+	}
 }
