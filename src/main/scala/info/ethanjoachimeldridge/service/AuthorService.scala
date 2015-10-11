@@ -14,4 +14,8 @@ class AuthorService(implicit daoContext: DAOContext, ec: ExecutionContext)  {
 	def findAuthorById(id: Long) = {
 		daoContext.authorDAO.read(Author(id=id,name=""))
 	}
+
+	def getAuthors(page: Int, perPage: Int) = {
+		daoContext.authorDAO.readAll(page, perPage)
+	}
 }
