@@ -11,8 +11,16 @@ class AuthorService(implicit daoContext: DAOContext, ec: ExecutionContext)  {
 		daoContext.authorDAO.create(author)
 	}
 
+	def deleteAuthor(author: Author) = {
+		daoContext.authorDAO.delete(author)
+	}
+
 	def findAuthorById(id: Long) = {
 		daoContext.authorDAO.read(Author(id=id,name=""))
+	}
+
+	def getBooksForAuthor(author: Author) = {
+		daoContext.authorDAO.findBooksByAuthor(author)
 	}
 
 	def getAuthors(page: Int, perPage: Int) = {
