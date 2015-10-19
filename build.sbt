@@ -27,7 +27,8 @@ libraryDependencies ++= {
 		"com.typesafe.akka"   %%  "akka-testkit"  % akkaV   % "test",
 		"io.spray"            %%  "spray-testkit" % sprayV  % "test",
 		"org.scalatest" % "scalatest_2.11" % "2.2.4" % "test",
-		"org.flywaydb" % "flyway-core" % "3.2.1"
+		"org.flywaydb" % "flyway-core" % "3.2.1",
+		"com.plameno" %% "plameno-validation" % "0.1-SNAPSHOT"
 	)
 }
 
