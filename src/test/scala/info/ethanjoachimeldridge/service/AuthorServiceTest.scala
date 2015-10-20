@@ -16,7 +16,42 @@ class AuthorServiceTest extends MySQLTest with MySQLDAOContext {
 
 	"The Author Service" should "reject creating invalid authors" in {
 		intercept[InvalidModelException] {
-			authorService.createAuthor(Author(-1,"name"))
+			authorService.createAuthor(Author(-1,""))
+		}
+	}	
+
+	it should "reject deleting an invalid author" in {
+		intercept[InvalidModelException] {
+			authorService.deleteAuthor(Author(-1, ""))
+		}
+	}
+
+	it should "reject retrieving books for an invalid author" in {
+		intercept[InvalidModelException] {
+			authorService.getBooksForAuthor(Author(-1,""))
+		}
+	}
+
+	var createdAuthorId = -1L
+
+	it should "create an Author with a valid author" in {
+		val author = Author(1,"Author")
+		val res = authorService.createAuthor(author)
+		whenReady(res) { result =>
+			assertResult(result.name)(author.name)
+			createdAuthorId = result.id
+		}
+	}
+
+	it should "be able to retrieve an author by id" in {
+		whenReady(authorService.findAuthorById(createdAuthorId)) { result =>
+			assertResult(result.id)(createdAuthorId)
+		}
+	}
+
+	it should "be able to delete an author" in {
+		whenReady(authorService.deleteAuthor(Author(createdAuthorId,"Author"))) { result =>
+			assert(result)
 		}
 	}
 
