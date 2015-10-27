@@ -1,12 +1,12 @@
 package info.ethanjoachimeldridge.model.validation
 
-import info.ethanjoachimeldridge.model.Author
+import info.ethanjoachimeldridge.model.BookMeta
 import com.plameno.validation._
 
-class BookMetaValidation(a: Author) extends FormValidator {
+class BookMetaValidation(a: BookMeta) extends FormValidator {
 	val validators = Map(
 		"lang" -> List(
-			RequiredStringValidator(a.lang, Some("Name may not be empty"))
+			RequiredStringValidator(a.lang.toLanguageTag, Some("Name may not be empty"))
 		),
 		"title" -> List(
 			RequiredStringValidator(a.title, Some("Title may not be empty"))
@@ -18,7 +18,7 @@ class BookMetaValidation(a: Author) extends FormValidator {
 			RequiredStringValidator(a.longDescription, Some("Long description may not be empty"))
 		),
 		"bookId" -> List(
-			PositiveIntValidator(a.id.toInt)
+			PositiveIntValidator(a.bookId.toInt)
 		)
 	)
 
@@ -26,7 +26,7 @@ class BookMetaValidation(a: Author) extends FormValidator {
 }
 
 object BookMetaValidation {
-	def apply(a: Author) = {
+	def apply(a: BookMeta) = {
 		new BookMetaValidation(a)
 	}
 }
