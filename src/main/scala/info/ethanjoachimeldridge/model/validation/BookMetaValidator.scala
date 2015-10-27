@@ -3,7 +3,7 @@ package info.ethanjoachimeldridge.model.validation
 import info.ethanjoachimeldridge.model.BookMeta
 import com.plameno.validation._
 
-class BookMetaValidation(a: BookMeta) extends FormValidator {
+class BookMetaValidator(a: BookMeta) extends FormValidator {
 	val validators = Map(
 		"lang" -> List(
 			RequiredStringValidator(a.lang.toLanguageTag, Some("Name may not be empty"))
@@ -25,8 +25,8 @@ class BookMetaValidation(a: BookMeta) extends FormValidator {
 	def isValid = validate.isEmpty
 }
 
-object BookMetaValidation {
+object BookMetaValidator {
 	def apply(a: BookMeta) = {
-		new BookMetaValidation(a)
+		new BookMetaValidator(a)
 	}
 }
