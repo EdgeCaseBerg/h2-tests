@@ -34,6 +34,15 @@ class BookMetaValidationTest extends FlatSpec with Matchers{
 			)).validate
 		}	
 	}
+
+	it should "be invalid if the longDescription is empty" in {
+		val errors = Map("longDescription" -> "Long description may not be empty")
+		assertResult(errors) {
+			BookMetaValidator(model.copy(
+				bookId=1,title="NonEmpty",shortDescription="NonEmpty"
+			)).validate
+		}	
+	}
  
 	it should "be valid if the bookMeta has all fields non empty and positive" in {
 		val errors = Map[String,String]()
