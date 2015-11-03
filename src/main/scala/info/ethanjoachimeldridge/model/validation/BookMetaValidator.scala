@@ -6,7 +6,7 @@ import com.plameno.validation._
 class BookMetaValidator(a: BookMeta) extends FormValidator {
 	val validators = Map(
 		"lang" -> List(
-			RequiredStringValidator(a.lang.toLanguageTag, Some("Name may not be empty"))
+			InCaseValidator(a.lang.toLanguageTag, {t : String => t != "und"}, Some("Name may not be undefined"))
 		),
 		"title" -> List(
 			RequiredStringValidator(a.title, Some("Title may not be empty"))

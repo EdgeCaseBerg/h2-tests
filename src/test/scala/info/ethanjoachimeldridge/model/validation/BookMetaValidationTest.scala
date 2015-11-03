@@ -43,6 +43,15 @@ class BookMetaValidationTest extends FlatSpec with Matchers{
 			)).validate
 		}	
 	}
+
+	it should "be invalid if the language is empty/undefined" in {
+		val errors = Map("lang" -> "Name may not be undefined")
+		assertResult(errors) {
+			BookMetaValidator(model.copy(
+				bookId=1,lang = new Locale(""),title="NonEmpty",shortDescription="NonEmpty",longDescription="NonEmpty"
+			)).validate
+		}
+	}
  
 	it should "be valid if the bookMeta has all fields non empty and positive" in {
 		val errors = Map[String,String]()
