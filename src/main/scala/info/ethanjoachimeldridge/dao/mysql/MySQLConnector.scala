@@ -1,6 +1,7 @@
 package info.ethanjoachimeldridge.dao.mysql
 
 import java.sql.{Connection,SQLException}
+import com.mysql.jdbc.exceptions.jdbc4.CommunicationsException
 import scalikejdbc._
 import anorm._
 
@@ -20,11 +21,12 @@ object MySQLConnector extends StrictLogging {
 
 	logger.info(s"Initialized MySQLConnector")
 
-	/* Encapsulate Database Specific Errors into Application Errors that can be handled */
-	private def sqlToApplicationException(ex: Throwable) : Throwable = ex match {
-		case sql : SQLException if sql.getErrorCode() == 23505 => DuplicateDataError("Could not perform request, unique data violation", ex)
-		case sql : SQLException if sql.getErrorCode() == 42102 => TableNotFoundException("Could not perform request, underlying structore not present", ex)
-		case sql : SQLException if sql.getErrorCode() == 42122 => DataErrorException(s"The column specified in your query does not exist! ${ex.getMessage()}", ex)
+	/* Encapsulate Database Specific Errors[ into Application Errors that can be handled */
+		private def sqlToApplicationException(ex: Throwable) : Throwable = ex match {
+			case sql : SQLException if sql.getErrorCode() == 23505 => DuplicateDataError("Could not perform request, unique data violation", ex)
+			case sql : SQLException if sql.getErrorCode() == 42102 => TableNotFoundException("Could not perform request, underlying structore not present", ex)
+			case sql : SQLException if sql.getErrorCode() == 42122 => DataErrorException(s"The column specified in your query does not exist! ${ex.getMessage()}", ex)
+			case sql:  CommunicationsException => DataErrorException(s"Is the database online? [${sql.getMessage()}]",sql)
 		case sql : SQLException => 
 			logger.warn(s"Unhandled Converted MySQL Exception: ${sql.getSQLState()} ${sql.getErrorCode()}")
 			DataErrorException(ex.getMessage, ex)
