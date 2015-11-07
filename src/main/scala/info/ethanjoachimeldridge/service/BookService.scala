@@ -52,7 +52,7 @@ class BookService(implicit daoContext: DAOContext, ec: ExecutionContext) extends
 		withValidBook(book, daoContext.bookDAO.delete)
 	}
 
-	def getBooks(page: Int, perPage: Int) = {
+	def getBooksAndMeta(page: Int, perPage: Int) = {
 		daoContext.bookDAO.readAll(page, perPage)
 	}
 }
