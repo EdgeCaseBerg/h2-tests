@@ -18,6 +18,12 @@ class BookServiceTest extends MySQLTest with MySQLDAOContext {
 		intercept[InvalidModelException] {
 			bookService.createBook(Book(-1,-1))
 		}
-	}	
+	}
+
+	it should "reject creating meta for a book that does not exist" in {
+		intercept[InvalidModelException] {
+			bookService.createBookMeta(BookMeta(-1,new java.util.Locale("EN"), "title","short","long"))
+		}
+	}
 
 }
