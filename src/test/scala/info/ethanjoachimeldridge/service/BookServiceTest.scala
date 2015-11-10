@@ -25,5 +25,6 @@ class BookServiceTest extends MySQLTest with MySQLDAOContext {
 			bookService.createBookMeta(BookMeta(-1,new java.util.Locale("EN"), "title","short","long"))
 		}
 	}
+	
 
 }
