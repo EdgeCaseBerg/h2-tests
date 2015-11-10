@@ -26,5 +26,17 @@ class BookServiceTest extends MySQLTest with MySQLDAOContext {
 		}
 	}
 	
+	it should "be able to create a book if valid" in {
+		val result = bookService.createBook(Book(1,1))
+		// check if future failed or not
+		
+	}
+	
+	it should "reject creating meta if that meta is invalid" in {
+		intercept[InvalidModelException] {
+			
+		}
+	}
+	
 
 }
