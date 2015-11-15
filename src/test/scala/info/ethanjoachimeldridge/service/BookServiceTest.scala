@@ -7,8 +7,6 @@ import info.ethanjoachimeldridge.dao.mysql.{MySQLTest,MySQLDAOContext}
 import scala.concurrent.ExecutionContext.Implicits.global
 import info.ethanjoachimeldridge.model.validation.exception.InvalidModelException
 
-object TestMySQLContext extends MySQLDAOContext {}
-
 class BookServiceTest extends MySQLTest with MySQLDAOContext {
 
 	implicit val s = TestMySQLContext
@@ -25,7 +23,7 @@ class BookServiceTest extends MySQLTest with MySQLDAOContext {
 			bookService.createBookMeta(BookMeta(-1,new java.util.Locale("EN"), "title","short","long"))
 		}
 	}
-	
+
 	it should "be able to create a book if valid" in {
 		val result = bookService.createBook(Book(1,1))
 		// check if future failed or not
