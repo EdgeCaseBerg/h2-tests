@@ -11,6 +11,7 @@ class BookServiceTest extends MySQLTest with MySQLDAOContext {
 
 	implicit val s = TestMySQLContext
 	val bookService = new BookService
+	val authorService = new AuthorService
 
 	"The Book Service" should "reject creating invalid books" in {
 		intercept[InvalidModelException] {
@@ -25,8 +26,17 @@ class BookServiceTest extends MySQLTest with MySQLDAOContext {
 	}
 
 	it should "be able to create a book if valid" in {
-		val result = bookService.createBook(Book(1,1))
-		// check if future failed or not
+		
+		val result = for {
+			author <- authorService.createAuthor(Author(-1, "authorname"))
+			book <- bookService.createBook(Book(author.id,-1))
+		} yield (author, book)
+		
+		whenReady(result) { t => 
+			val (author, book) = t
+			assertResult(book.bookId != -1)
+			authorService.deleteAuthor(author)
+		}
 		
 	}
 	
