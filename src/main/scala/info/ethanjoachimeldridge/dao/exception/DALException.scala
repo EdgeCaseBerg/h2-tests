@@ -1,5 +1,6 @@
 package info.ethanjoachimeldridge.dao.exception
 
+/** Exceptions that occur in the DAL layer */
 abstract class DALException extends Exception
 
 case class DataErrorException(val msg: String, originalException: Throwable) extends DALException
